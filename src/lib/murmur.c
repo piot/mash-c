@@ -35,8 +35,10 @@ uint32_t mashMurmurHash3(const uint8_t* data, size_t octetCount)
     switch (octetCount & 3) {
     case 3:
         k1 ^= (uint32_t)tail[2] << 16;
+        /* fall through */
     case 2:
         k1 ^= (uint32_t)tail[1] << 8;
+        /* fall through */
     case 1:
         k1 ^= tail[0];
         k1 *= c1;
