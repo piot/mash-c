@@ -15,7 +15,7 @@ uint32_t mashMurmurHash3(const uint8_t* data, size_t octetCount)
     const uint32_t c4 = 0xc2b2ae35;
     const uint32_t c5 = 0xe6546b64;
 
-    const int nblocks = (int) octetCount / 4;
+    const int nblocks = (int)octetCount / 4;
     const uint32_t* blocks = (const uint32_t*)(data + nblocks * 4);
     uint32_t h1 = 0; // TODO: can use a seed here
 
@@ -32,14 +32,17 @@ uint32_t mashMurmurHash3(const uint8_t* data, size_t octetCount)
     const uint8_t* tail = (const uint8_t*)(data + nblocks * 4);
     uint32_t k1 = 0;
 
-    switch (octetCount & 3) {
-    case 3:
+    uint32_t lower_bits = octetCount & 3;
+
+    if (lower_bits == 3) {
         k1 ^= (uint32_t)tail[2] << 16;
-        __attribute__((fallthrough));
-    case 2:
+    }
+
+    if (lower_bits == 2) {
         k1 ^= (uint32_t)tail[1] << 8;
-        __attribute__((fallthrough));
-    case 1:
+    }
+
+    if (lower_bits == 1) {
         k1 ^= tail[0];
         k1 *= c1;
         k1 = MASH_ROTATE_LEFT_32_BIT(k1, 15);
