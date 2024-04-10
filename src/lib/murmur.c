@@ -7,7 +7,7 @@
 /// @param data data to calculate hash on
 /// @param octetCount number of octets in data
 /// @return the 32 bit hash
-uint32_t mashMurmurHash3(const uint8_t* data, size_t octetCount)
+uint32_t mashMurmurHash3WithSeed(const uint8_t* data, size_t octetCount, uint32_t seed)
 {
     const uint32_t c1 = 0xcc9e2d51;
     const uint32_t c2 = 0x1b873593;
@@ -17,7 +17,7 @@ uint32_t mashMurmurHash3(const uint8_t* data, size_t octetCount)
 
     const int nblocks = (int)octetCount / 4;
     const uint32_t* blocks = (const uint32_t*)(data + nblocks * 4);
-    uint32_t h1 = 0; // TODO: can use a seed here
+    uint32_t h1 = seed;
 
     for (int i = -nblocks; i; i++) {
         uint32_t k1 = blocks[i];
@@ -58,4 +58,9 @@ uint32_t mashMurmurHash3(const uint8_t* data, size_t octetCount)
     h1 ^= h1 >> 16;
 
     return h1;
+}
+
+uint32_t mashMurmurHash3(const uint8_t* data, size_t octetCount)
+{
+    return mashMurmurHash3WithSeed(data, octetCount, 0);
 }
